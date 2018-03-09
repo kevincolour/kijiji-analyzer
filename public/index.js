@@ -1,5 +1,5 @@
 $(document).ready(()=>{
-    urlBase = 'https://kijiji-analyzer.herokuapp.com/'
+    urlBase = 'https://kijiji-analyzer.herokuapp.com'
     var start = new Date().getTime();
 
     $('#objectSearch').focus();
