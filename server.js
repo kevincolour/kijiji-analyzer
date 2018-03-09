@@ -81,7 +81,10 @@ router.post('/scrape', function(req,res){
     // literally opens a chrome tab and google searches for the correct kijiji location;
     let scrape = async (resolve,reject) => {
     	console.log('Launching Puppeteer');
-        const browser = await puppeteer.launch({headless: true});
+        
+    		puppeteer.launch({})
+        const browser = await puppeteer.launch({headless: true,
+        										args: ['--no-sandbox', '--disable-setuid-sandbox']});
         const page = await browser.newPage();
         const keyboard = page.keyboard;
         
