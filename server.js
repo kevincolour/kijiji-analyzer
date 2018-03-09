@@ -17,35 +17,35 @@ var app = express();
 
 app.listen(port);
 console.log('magic on port 8080');
-// app.use(express.static('public'));
+app.use(express.static('public'));
 
-// app.use(bodyParser.urlencoded({extended: true}));
-// app.use(bodyParser.json());
-// // const path = require('path');
-
-
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+// const path = require('path');
 
 
 
-//         // Return a new_url
+
+
+        // Return a new_url
         
     
 
 
    
 
-//     const router = express.Router();
+    const router = express.Router();
 
-//     router.use(function(req, res, next) {
-//         // // res.header("Access-Control-Allow-Methods", "PUT")
-//             res.header('Access-Control-Allow-Origin', '*');
-//         res.header('Content-type', 'application/json');
-//         // // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//             // res.json({message: 'write worked'});
-//         next(); // make sure we go to the next routes and don't stop here
-//     });
+    router.use(function(req, res, next) {
+        // // res.header("Access-Control-Allow-Methods", "PUT")
+            res.header('Access-Control-Allow-Origin', '*');
+        res.header('Content-type', 'application/json');
+        // // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            // res.json({message: 'write worked'});
+        next(); // make sure we go to the next routes and don't stop here
+    });
     
-//     app.use('/', router);        
+    app.use('/', router);        
 
 
 
