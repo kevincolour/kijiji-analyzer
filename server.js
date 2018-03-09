@@ -80,6 +80,7 @@ router.post('/scrape', function(req,res){
     //launching a third party app to scrape data.
     // literally opens a chrome tab and google searches for the correct kijiji location;
     let scrape = async (resolve,reject) => {
+    	console.log('Launching Puppeteer');
         const browser = await puppeteer.launch({headless: true});
         const page = await browser.newPage();
         const keyboard = page.keyboard;
@@ -91,7 +92,7 @@ router.post('/scrape', function(req,res){
         // Scrape
         await keyboard.type(locationString);
 
-
+console.log('Launched Puppeteer');
         //im feeling lucky button
         await page.focus('#tsf > div.tsf-p > div.jsb > center > input[type="submit"]:nth-child(2)');
         await page.click('#tsf > div.tsf-p > div.jsb > center > input[type="submit"]:nth-child(2)');
