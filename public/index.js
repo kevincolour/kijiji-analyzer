@@ -1,5 +1,5 @@
 $(document).ready(()=>{
-    urlBase = 'http://localhost:8080'
+    urlBase = 'https://kijiji-analzyer.herokuapp.com/'
     var start = new Date().getTime();
 
 
