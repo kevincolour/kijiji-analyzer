@@ -1,8 +1,80 @@
-#searchButton {
-    width: 100px;
-    height: 40px;
+p{
+    color:black;
 }
+
+
 canvas{
     width : 200px;
     height : 200px;
 }
+#kijijiBar{
+    width : 100%;
+    height : 85px;
+    padding-bottom: 15px;
+    padding-top : 15px;
+    padding :20px 20px;
+    background-color: #403e7c;
+    display: inline-block;
+    color: white;
+    font-size: 1.3em;
+}
+img{
+    height: 45px;
+    width: 110px;
+    padding-left: 20px;
+}
+.inlineClass{
+    display: inline-block;
+}
+#inlineText{
+    border-top: 30px;
+    font-family: 'Nova Flat';
+    font-size: 25px;
+}
+
+
+
+
+a{
+    color:white;
+
+}
+
+div{
+  color:white;
+}
+
+#searchWrapper{
+    margin:0 auto;
+    width: 40em;
+    padding-top : 10px;
+}
+.textSearch{
+    outline-width: 0;
+    outline: none;
+    background-color: white;
+    border: 1px #DEDEE1 solid;
+    
+ 
+
+    color: #3E414F;
+ 
+    font: 400 13.3333px Arial;
+    font-size: 16px;
+    height : 45px;
+ 
+}   
+button{
+    height :45px;
+    width: 78px;
+    background: url(searchIcon.png);
+}
+searchIcon{
+    
+    height :40px;
+    width: 68px;
+}
+#userLocation{
+    
+}
+

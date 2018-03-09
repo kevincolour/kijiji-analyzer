@@ -1,19 +1,27 @@
 $(document).ready(()=>{
-    urlBase = 'https://kijiji-analyzer.herokuapp.com'
+    urlBase = 'https://kijiji-analyzer.herokuapp.com/'
     var start = new Date().getTime();
 
+    $('#objectSearch').focus();
+    $(document).keypress((e)=>{
+     if (e.which == 13){
+         $('#searchButton').trigger("click");
+     }   
+    }
 
+)
+    
    $('#searchButton').on('click', ()=>{
 
 
 
 
-
+    console.log('here');
 
 
 
     
-        let userSearchQuery = $('#userSearch').val(); 
+        let userSearchQuery = $('#objectSearch').val(); 
         let userSearchLocation = $('#userLocation').val();
         $.ajax({
             type: 'POST',
@@ -59,11 +67,10 @@ $(document).ready(()=>{
                     }
                 })
                 
-                console.log(datasetReduced);
-                console.log(datasetReducedCount);
-                console.log('unsorted val', success.allPrices)
-                console.log('unique values: ', uniqueValues);
-                console.log('values', success.pricesList);
+                $divVar = $('<div></div>');
+                $divVar.append("The average is" + success.average);
+                $divVar.append("The Median is" + success.median);
+                $('#searchResult').append($divVar);
                 
                 //chart generation ( open source)
 
