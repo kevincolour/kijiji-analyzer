@@ -1,5 +1,126 @@
 
 <html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nova Flat">
+    <link href = "index.css" rel= "stylesheet">
+    
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Kijiji Appraiser</title>
+</head>
+
+<body>
+        <nav class="navbar" style ="background-color: #403e7c">
+          
+       
+<!--       
+              
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+             -->
+
+             <div class="d-flex">
+                <div class="p-2"> <img src="logo.png"></div>
+                <div class="p-2" id = "inlineText">APPRAISER</div>
+                
+              </div>
+              
+            
+              <div class="d-flex">
+                <div class="p-2"><a href ="#">About</a></div>
+                <div class="p-2"><a href = "#"></a>Things for the Future</div>
+              </div>
+
+           
+        </nav>
+    <!-- <body>
+      <div id = 'kijijiBar'>
+        <div class ='inlineClass'>
+        <img src="logo.png">
+        </div>
+          <div class = 'inlineClass' id = 'inlineText'>ANALYZER</div>
+        
+      </div>
+        <span>
+            
+        </span>
+      </div>
+ -->
+ <div class="row p-3">
+   <div class="col-12 col-md-1 px-0"></div>
+   
+   <div class="col-12 col-md-6 px-0"> <input type ='text' id = "objectSearch" placeholder = "Search for anything..."class='form-control textSearch'>   </div>
+   <div class="col-12 col-md-3 px-0">
+     <input type = 'text' id = 'userLocation' placeholder = 'Location' class= 'form-control textSearch'>
+    </div>  
+    <div class ="col-12 col-md-1 px-0"><button id = 'searchButton'></button></div> 
+    <div class="col-12   col-md-1 px-0"> </div>
+  </div>
+  
+  
+
+  <div class="row progressTextClass">
+    
+    <div class="col-12 col-md-3 px-0"></div>
+    
+    <div class="col-12 col-md-6 text-center">
+      
+      <div id = "progressText"> Scraping Kijiji . . . <img id = 'loadingIcon'src= "./loading.gif"></div>
+      
+    </div>
+  </div>
+  <div class="modal"> </div>
+  
+  <div id = "fullResult">
+
+    <div id = "searchResult">
+   
+</div>
+<div class="row ">
+ 
+  
+  
+    <div class="col-12 col-md-1 px-0"></div>
+    <div id = "modeDiv" class="col-12 col-md-3 result text-center">
+    </div>
+
+    
+   <div id = "meanDiv" class="col-12 col-md-3 result text-center">
+   </div>
+   
+   <div id = "medianDiv" class="col-12 col-md-3 result text-center">
+   </div>
+   <div class="col-12 col-md-1"></div>
+</div>
+ 
+
+</div>
+        <canvas id="myChart" ></canvas>
+      </div>
+      <div>
+        <canvas id="myChartRange" ></canvas>
+    </div>
+      <div>
+          <canvas id="myChartPretty" ></canvas>
+      </div>
+
+    </div>
+      <script
+      src="https://code.jquery.com/jquery-3.3.1.js"
+      integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+      crossorigin="anonymous"></script>
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+         <script src="index.js"></script>
+    </body>
 
 
 </html>
