@@ -9,7 +9,7 @@
     <link href = "index.css" rel= "stylesheet">
     
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Kijiji Buy/Sell Tool</title>
+    <title>Kijiji Appraiser</title>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
 
              <div class="d-flex">
                 <div class="p-2"> <img src="logo.png"></div>
-                <div class="p-2" id = "inlineText">ANALYZER</div>
+                <div class="p-2" id = "inlineText">APPRAISER</div>
                 
               </div>
               
@@ -54,26 +54,65 @@
         </span>
       </div>
  -->
-
  <div class="row p-3">
    <div class="col-12 col-md-1 px-0"></div>
-
+   
    <div class="col-12 col-md-6 px-0"> <input type ='text' id = "objectSearch" placeholder = "Search for anything..."class='form-control textSearch'>   </div>
    <div class="col-12 col-md-3 px-0">
-      <input type = 'text' id = 'userLocation' placeholder = 'Location' class= 'form-control textSearch'>
+     <input type = 'text' id = 'userLocation' placeholder = 'Location' class= 'form-control textSearch'>
     </div>  
-  <div class ="col-12 col-md-1 px-0"><button id = 'searchButton'></button></div> 
-    <div class="col-12 col-md-1 px-0"> </div>
- </div>
+    <div class ="col-12 col-md-1 px-0"><button id = 'searchButton'></button></div> 
+    <div class="col-12   col-md-1 px-0"> </div>
+  </div>
+  
+  
 
- <div id = "searchResult">
-   <p>result</p>
- </div>
+  <div class="row progressTextClass">
+    
+    <div class="col-12 col-md-3 px-0"></div>
+    
+    <div class="col-12 col-md-6 text-center">
+      
+      <div id = "progressText"> Scraping Kijiji . . . <img id = 'loadingIcon'src= "./loading.gif"></div>
+      
+    </div>
+  </div>
+  <div class="modal"> </div>
+  
+  <div id = "fullResult">
+
+    <div id = "searchResult">
+   
+</div>
+<div class="row ">
+ 
+  
+  
+    <div class="col-12 col-md-1 px-0"></div>
+    <div id = "modeDiv" class="col-12 col-md-3 result text-center">
+    </div>
+
+    
+   <div id = "meanDiv" class="col-12 col-md-3 result text-center">
+   </div>
+   
+   <div id = "medianDiv" class="col-12 col-md-3 result text-center">
+   </div>
+   <div class="col-12 col-md-1"></div>
+</div>
+ 
+
+</div>
         <canvas id="myChart" ></canvas>
       </div>
       <div>
+        <canvas id="myChartRange" ></canvas>
+    </div>
+      <div>
           <canvas id="myChartPretty" ></canvas>
       </div>
+
+    </div>
       <script
       src="https://code.jquery.com/jquery-3.3.1.js"
       integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="

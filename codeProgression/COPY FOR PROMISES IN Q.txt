@@ -1,0 +1,207 @@
+const puppeteer = require('puppeteer');
+const cheerio = require('cheerio');
+const express = require('express');
+const request = require('request');
+const rp = require('request-promise');
+const fs = require('fs');
+
+
+
+const SearchQuery = 'iphone 6';
+
+let newSearchQuery = SearchQuery.replace(' ', '-');    
+
+var app = express();
+let scrape = async (resolve,reject) => {
+    const browser = await puppeteer.launch({headless: true});
+    const page = await browser.newPage();
+    const keyboard = page.keyboard;
+    await page.goto('https://www.kijiji.ca/');
+    // Scrape
+       await page.type('#SearchKeyword', SearchQuery);
+//   await page.goBack();
+
+    // await page.waitFor(1000);
+    // await page.click('#SearchKeyword');
+
+    // await page.keyboard.down('KeyA');
+    // await page.keyboard.type('akdslfjsklfjlkfsjdlflsdjfslkf');
+    //     await page.screenshot({path: 'kjiji.png'});
+    
+    await page.click('#MainContainer > div:nth-child(1) > div > header > div.headerContainer-640323838.headerContainer__on-3459900220 > div.searchBarWrapper-3699875736 > form > button');
+    await page.waitForSelector('#FesLoaderTop');
+    return page.url();
+}
+
+
+        // Return a new_url
+        
+    
+        let new_url;
+        scrape().then((value) => {
+            new_url = value;
+            console.log('done');
+
+}).catch((error)=> {
+    console.log('error', error);
+});
+
+
+
+async function parsePrices(){
+    new_url = 'https://www.kijiji.ca/b-gta-greater-toronto-area/iphone-6/k0l1700272?dc=true'
+    
+    const limit = 6;
+    
+    await getPrices(new_url );
+        
+       
+    console.log ('first url',new_url);
+        
+        let i = 2;
+        new_url = (new_url.substring(0,new_url.indexOf(newSearchQuery)+ newSearchQuery.length + 1) + 'page-' + i
+        + new_url.substring(new_url.indexOf(newSearchQuery)+ newSearchQuery.length));
+        
+    
+    
+    for (i; i < limit; i++){
+        
+         await getPrices(new_url);
+            // 6 is the  length of (page-x);
+        
+        
+    
+        new_url = (new_url.substring(0,new_url.indexOf(newSearchQuery)+ newSearchQuery.length + 6) + i
+        + new_url.substring(new_url.indexOf(newSearchQuery)+ newSearchQuery.length + 7 ));
+        console.log('newer url: ',new_url);
+        
+        }
+ 
+}
+
+app.get('/scrape', function(req,res){
+
+
+    parsePrices();
+// for testing
+   
+// new_url = 'https://www.kijiji.ca/b-gta-greater-toronto-area/iphone-6/k0l1700272?dc=true'
+    
+// const limit = 6;
+
+// let result = getPrices(new_url );
+    
+   
+// console.log ('first url',new_url);
+    
+//     let i = 2;
+//     new_url = (new_url.substring(0,new_url.indexOf(newSearchQuery)+ newSearchQuery.length + 1) + 'page-' + i
+//     + new_url.substring(new_url.indexOf(newSearchQuery)+ newSearchQuery.length));
+    
+
+
+// for (i = i + 1; i < limit; i++){
+    
+//      getPrices(new_url);
+//         // 6 is the  length of (page-x);
+    
+    
+
+//     new_url = (new_url.substring(0,new_url.indexOf(newSearchQuery)+ newSearchQuery.length + 6) + i
+//     + new_url.substring(new_url.indexOf(newSearchQuery)+ newSearchQuery.length + 7 ));
+//     console.log('newer url: ',new_url);
+    
+//     }
+
+
+
+
+})
+
+
+// i is index
+function getPrices(url_var){
+    
+    let pricesPromise = new Promise((resolve,reject) =>{
+    let options = {
+        uri: url_var,
+        transform: function (body) {
+            return cheerio.load(body);
+        }
+    };
+    
+    rp(options)
+        .then(function ($) {
+            let prices = [];
+            let children = $('#MainContainer > div.layout-3 > div.col-2 > div').children('.regular-ad');
+
+
+
+        
+                fs.readFile('dataJSON.json', 'utf8', function readFileCallback(err, data){
+                if (err){
+                    console.log("ERROR READING FILE");
+                    console.log(err);
+                } else {
+                obj = JSON.parse(data); //now it an object
+
+
+            children.each(function(i, elem){
+                let toPrint = $(elem).children('.clearfix').children('.info').children('.info-container').children('.price');
+                let price = toPrint.html().trim().replace('$','');
+                if (price.indexOf('Contact') === -1 && price.indexOf('Swap') === -1){
+                    prices.push(price);
+
+                    //mabye push other things later
+                    obj.prices.push(price);
+                }
+            })
+          //  let json = {prices : prices};
+           
+        
+          
+          let json = JSON.stringify(obj); //convert it back to json
+
+
+          console.log("HERES THE json:",  json  );
+          fs.writeFile('dataJSON.json', json, 'utf8', function(err){
+              
+                    console.log('File written');
+                }); // write it back
+                
+            resolve('Success');
+            }});
+            
+     
+            // Process html like you would with jQuery...
+        })
+        .catch(function (err) {
+            // Crawling failed or Cheerio choked...
+            console.log('ehre where error' ,err);
+        });
+    })
+    console.log('ehre at end');
+    return pricesPromise;
+    }
+    
+
+
+
+
+const router = express.Router();
+
+router.use(function(req, res, next) {
+    // // res.header("Access-Control-Allow-Methods", "PUT")
+     res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-type', 'application/json');
+    // // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+     // res.json({message: 'write worked'});
+    next(); // make sure we go to the next routes and don't stop here
+});
+
+app.use('/', router);
+
+app.use(express.static('public'));
+
+app.listen('8080');
+console.log('magic on port 8080');
