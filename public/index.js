@@ -177,7 +177,7 @@ $(document).ready(()=>{
                  
                 
                 $divVar.append(Math.floor(success.average));
-                $divAdAmount.append('Out of ').append($divAdAmountNumber).append('ads for ').append($userSearchDiv).append(', the results are');
+                $divAdAmount.append('Out of ').append($divAdAmountNumber).append('ads for ').append($userSearchDiv);
                 $divMode.append(modeVar);
                 $divMedian.append(success.median);
                 //$divVar.append("The Median is" + success.median);
