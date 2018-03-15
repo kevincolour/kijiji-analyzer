@@ -113,6 +113,7 @@ router.post('/scrape', function(req,res){
       //search button
       // await page.click('#MainContainer > div:nth-child(1) > div > header > div.headerContainer-640323838.headerContainer__on-3459900220 > div.searchBarWrapper-3699875736 > form > button');
       await keyboard.press('Enter');
+      await page.waitFor(500);
       //waiting for load
      try{ await page.waitForSelector('#FesLoaderTop');
     }
