@@ -94,7 +94,7 @@ router.post('/scrape', function(req,res){
         if (page.url().indexOf('kijiji') == -1){
             reject(page.url())
         } 
-        await page.waitFor(1000);
+        
     //     page.once('load', () => {
             
     //         console.log('Page loaded!')
@@ -104,6 +104,7 @@ router.post('/scrape', function(req,res){
 
     //search bar on kijiji
     await page.waitForSelector('#SearchKeyword');
+    await page.waitFor(1000);
       await page.type('#SearchKeyword', SearchQuery);
 
          
