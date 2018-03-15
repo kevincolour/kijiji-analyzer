@@ -71,7 +71,8 @@ router.post('/scrape', function(req,res){
     //launching a third party app to scrape data.
     // literally opens a chrome tab and google searches for the correct kijiji location;
     let scrape = async (resolve,reject) => {
-        const browser = await puppeteer.launch({headless: false});
+        
+        const browser = await puppeteer.launch({headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox']};
         const page = await browser.newPage();
         const keyboard = page.keyboard;
         
