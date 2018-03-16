@@ -103,7 +103,7 @@ router.post('/scrape', function(req,res){
     
     // });
     //search bar on kijiji
-    await page.waitForSelector('#SearchKeyword');
+    //await page.waitForSelector('#SearchKeyword');
       await page.type('#SearchKeyword', SearchQuery);
 
          
