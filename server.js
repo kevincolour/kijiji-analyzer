@@ -102,10 +102,8 @@ router.post('/scrape', function(req,res){
     //          page.type('#SearchKeyword', SearchQuery);
     
     // });
-    waitForNavigation(options);
     //search bar on kijiji
     await page.waitForSelector('#SearchKeyword');
-    await page.waitFor(1000);
       await page.type('#SearchKeyword', SearchQuery);
 
          
