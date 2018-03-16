@@ -72,7 +72,7 @@ router.post('/scrape', function(req,res){
     // literally opens a chrome tab and google searches for the correct kijiji location;
     let scrape = async (resolve,reject) => {
         
-        const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
+        const browser = await puppeteer.launch({args: ['--no-sandbox','--process-per-site', '--disable-setuid-sandbox']});
         const page = await browser.newPage();
         const keyboard = page.keyboard;
         
@@ -88,7 +88,8 @@ router.post('/scrape', function(req,res){
         await page.focus('#tsf > div.tsf-p > div.jsb > center > input[type="submit"]:nth-child(2)');
         await page.click('#tsf > div.tsf-p > div.jsb > center > input[type="submit"]:nth-child(2)');
 
-        await page.waitForNavigation();
+        let options = {waitUntil:"networkidle0" }
+        await page.waitForNavigation(options);
         
         // if its not a kijiji url reject
         if (page.url().indexOf('kijiji') == -1){
@@ -101,7 +102,7 @@ router.post('/scrape', function(req,res){
     //          page.type('#SearchKeyword', SearchQuery);
     
     // });
-
+    waitForNavigation(options);
     //search bar on kijiji
     await page.waitForSelector('#SearchKeyword');
     await page.waitFor(1000);
