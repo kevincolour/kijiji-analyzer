@@ -49,6 +49,11 @@ app.use(bodyParser.json());
 
 
 
+router.post('/queryEbay', function (req,res) {
+    const userSearch = req.body.search.toLocaleLowerCase().trim();
+}
+
+
 router.post('/scrape', function(req,res){
 
   

@@ -58,7 +58,7 @@ $(document).ready(()=>{
 //     timerId = window.setInterval(repeatQuery, 1000);
     
     
-    urlBase = 'https://kijiji-analyzer.herokuapp.com';
+    urlBase = 'https://kijiji-appraiser.herokuapp.com';
     var start = new Date().getTime();
     let alreadySearching = false;
 
