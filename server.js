@@ -49,11 +49,6 @@ app.use(bodyParser.json());
 
 
 
-router.post('/queryEbay', function (req,res) {
-    const userSearch = req.body.search.toLocaleLowerCase().trim();
-}
-
-
 router.post('/scrape', function(req,res){
 
   
@@ -108,7 +103,7 @@ router.post('/scrape', function(req,res){
     
     // });
     //search bar on kijiji
-    //await page.waitForSelector('#SearchKeyword');
+    await page.waitForSelector('#SearchKeyword');
       await page.type('#SearchKeyword', SearchQuery);
 
          
