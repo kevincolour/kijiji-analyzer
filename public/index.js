@@ -86,6 +86,7 @@ function populateEbayPrices(query){
             error: (error)=>{
 
             },
+            timeout: 50000,
             success : (success) =>{
                 var end = new Date().getTime();
                 var time = (end - start) / 1000;
