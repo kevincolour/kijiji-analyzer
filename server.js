@@ -63,7 +63,13 @@ router.post('/queryEbay', function (req,res) {
     
     let firstPromise = new Promise((resolve,reject) =>{
         request.get(firstEbayUrl, (error, response, body) =>{
-            let responseObj =(JSON.parse(response.body)) 
+            let responseObj =(JSON.parse(response.body))
+            if (parseInt(responseObj.findItemsByKeywordsResponse[0].paginationOutput[0].totalPages[0]) === 0){
+                //failure, no results
+                reject("No results");
+            }
+            else{
+
                 // console.log(responseObj);
                 let adlist = responseObj.findItemsByKeywordsResponse[0].searchResult[0].item;
                 let usdPrices = [];
@@ -76,7 +82,7 @@ router.post('/queryEbay', function (req,res) {
                     }, 0);
                 let average = sum  / usdPrices.length;
                     let totalPages = parseInt(responseObj.findItemsByKeywordsResponse[0].paginationOutput[0].totalPages[0]);
-                    resolve([average,totalPages]);                    
+                    resolve([average,totalPages]);                }    
     })})
     firstPromise.then((success) => {
     let average = success[0];
@@ -140,6 +146,9 @@ router.post('/queryEbay', function (req,res) {
 
         
         })
+    
+    }).catch((error) =>{
+        console.log(error);
     })
 
 })
@@ -169,7 +178,7 @@ router.post('/scrape', function(req,res){
     // literally opens a chrome tab and google searches for the correct kijiji location;
     let scrape = async (resolve,reject) => {
         
-        const browser = await puppeteer.launch({args: ['--no-sandbox','--single-process',  '--disable-setuid-sandbox']});
+        const browser = await puppeteer.launch({args: ['--no-sandbox','--single-process', '--process-per-site', '--disable-setuid-sandbox']});
         const page = await browser.newPage();
         const keyboard = page.keyboard;
         
@@ -186,7 +195,7 @@ router.post('/scrape', function(req,res){
         await page.click('#tsf > div.tsf-p > div.jsb > center > input[type="submit"]:nth-child(2)');
 
         let options = {waitUntil:"networkidle0" }
-        await page.waitFor(5000);
+        await page.waitFor(2000);
         
         // if its not a kijiji url reject
         if (page.url().indexOf('kijiji') == -1){
@@ -235,7 +244,7 @@ router.post('/scrape', function(req,res){
         
     
 
- let  limit = 50;
+ let  limit = 100;
  let options = {
     uri: new_url,
     transform: function (body) {
@@ -248,10 +257,11 @@ rp(options)
         
         let fullString = $('.showing').html();
         // no results for query
-
+        console.log('fulstring',fullString);
         if (fullString === null){
             res.status(500).json({error: 'NO RESULTS FOR QUERY'});
         }
+        else{
         // no idea why i put 3 here
 
         let numberIndex = fullString.indexOf('of') + 3;
@@ -286,6 +296,8 @@ rp(options)
         //limit = 3;
  for (i = i + 1; i < limit + 1; i++){
      //console.log(new_url);
+     testar= [];
+    // testar.push(getPrices2(new_url));
       promisesList.push(getPrices(new_url));
 //         // 6 is the  length of (/page-);
     
@@ -298,6 +310,8 @@ rp(options)
      }
 
      Promise.all(promisesList).then((values) => {
+         
+        console.log('allPromisescomplete')
          let allPricesRaw =[].concat.apply([],values);
         let allPrices = allPricesRaw.map(x => {
             let newPrice = x.replace(',','');
@@ -340,11 +354,12 @@ rp(options)
 
 
 
-
+    }
 
 }).catch((error)=> {
 console.log('error', error);
 });
+
 
 
 //   parsePrices();
@@ -355,11 +370,9 @@ console.log('error', error);
     })
 })
 
-
-// i is index
-function getPrices(url_var){
+function getPrices2(url_var){
+    console.log('tock');
     
-    let pricesPromise = new Promise((resolve,reject) =>{
     let options = {
         uri: url_var,
         transform: function (body) {
@@ -369,7 +382,55 @@ function getPrices(url_var){
     
     rp(options)
         .then(function ($) {
+            console.log('tick');
+            let prices = [];
+            let children = $('#MainContainer > div.layout-3 > div.col-2 > div').children('.regular-ad');
 
+
+
+        
+
+            children.each(function(i, elem) {
+                let toPrint = $(elem).children('.clearfix').children('.info').children('.info-container').children('.price');
+                let price = toPrint.html().trim().replace('$','');
+                //symbols is nospacehtml
+                if (price.indexOf('&#xA0') === -1 && price.indexOf('Contact') === -1 && price.indexOf('Swap') === -1 && price.indexOf('Free') === -1){
+                    prices.push(price);
+
+                    //mabye push other things later
+          //          obj.prices.push(price);
+                }
+            })
+          //  let json = {prices : prices};
+           
+    ;
+          
+    
+            
+     
+            // Process html like you would with jQuery...
+        })
+        .catch(function (err) {
+            // Crawling failed or Cheerio choked...
+            console.log('ehre where error' ,err);
+        });
+    
+    return 0;
+    }
+
+
+let tickCounter = 0;
+// i is index
+function getPrices(url_var){
+    //console.log('tock');
+    let pricesPromise = new Promise((resolve,reject) =>{
+        request({
+            method: 'GET',
+            url: url_var
+        }, function(err, response, body) {
+        const $ = cheerio.load(body);
+           console.log('tick', tickCounter);
+           tickCounter += 1;
             let prices = [];
             let children = $('#MainContainer > div.layout-3 > div.col-2 > div').children('.regular-ad');
 
@@ -397,10 +458,7 @@ function getPrices(url_var){
      
             // Process html like you would with jQuery...
         })
-        .catch(function (err) {
-            // Crawling failed or Cheerio choked...
-            console.log('ehre where error' ,err);
-        });
+
     })
     return pricesPromise;
     }

@@ -84,7 +84,9 @@ function populateEbayPrices(query){
                     location : userSearchLocation
             },
             error: (error)=>{
-
+                console.log("SOMETHING WENT WRONG: " ,error);
+                $(".modal").hide(); $("#progressText").hide();
+                $('#searchResult').html('No results for ').append(userSearchQuery);
             },
             timeout: 50000,
             success : (success) =>{

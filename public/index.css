@@ -92,7 +92,9 @@ img{
 
 
 
-
+#aLink{
+    color: green;
+}
 a{
     color:white;
 
@@ -133,10 +135,9 @@ searchIcon{
     height :40px;
     width: 68px;
 }
-#userLocation{
-    
+a:hover {
+    text-decoration: none;
 }
-
 #searchResult{
     text-align:center;
 }

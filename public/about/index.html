@@ -1,1 +1,98 @@
-hello world
+
+<html>
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nova Flat">
+      <link href = "../index.css" rel= "stylesheet">
+      
+      <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+      <title>Kijiji Appraiser</title>
+  </head>
+  
+  <body>
+          <nav class="navbar" style ="background-color: #403e7c">
+            
+         
+  <!--       
+                
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+               -->
+  
+               <div class="d-flex">
+                 
+                  <div class="p-2">  <a href = "../"><img src="../logo.png"></a></div>
+                  <div class="p-2" id = "inlineText"><a href = "../">APPRAISER</a></div>
+                
+                </div>
+                
+              
+                <div class="d-flex">
+                  <div class="p-2"><a href ="#">About</a></div>
+                  <div class="p-2"><a href = "../improvement">Possible Improvements</a></div>
+                </div>
+  
+             
+          </nav>
+  <br>
+  <br>
+  <br>
+
+  <h1>About</h1>
+          <p>
+            Hello, and thanks for coming and making all this typing at least a little bit worth it. Welcome to the about page
+            and specifically welcome to the about section. Here I will describe what this application is. This application was built
+            with the intention of 
+          </p>
+
+          <h3>Methodology</h3>
+          <p>Here, I will describe how I attained the data. For Kijiji, the keywords in the input box are searched for in Kijiji's own search engine. 
+          This means that one can check the validity of the results by searching for the keyword with the location on the kijiji's site. 
+          The first 100 pages of the query is analyzed, and any paid ad is removed. Any ad that doesn't list a price is also removed from the dataset. All decimal values
+          are rounded up into an integer and fed into chart.js's API. 
+        </p>
+          <p>
+            Ebay has a very extensive and detailed api, and so attaining the data was just a matter of a simple GET request with the right parameters.
+            It is important to note here that eBay especially suffers from the lack of categorization. I attempted to circumnavigate this by analyzing the first 
+            page of the results which I thought would have the most relevant products and averaging them out to gain knowledge of what values are expected.
+            I then allowed any value within 50% of the average in either positive or negative direction to be admitted into the data set.
+
+          </p>
+
+
+          <h3>Possible Issues and Limitations</h3>
+        <p>There are certain considerations when interpreting the data. Firstly, it is important to note that I am infact a human and as a proud human I may have made errors in my execution
+            of this application. This means that the data might be wrong due to an unforseen circumstance. I hope for both our sakes that this doesn't happen. Secondly
+            there is the issue of the limited utility of the application due to the restricted variety of used goods it can be used on. This application works best
+            when it is used for goods that do not vary- an ideal example would be a specific type of smartphone. An awful item to search for would be something where quality and consequently
+            price varies. Searching for a dress, for example, would not be recommended. Indeed the program only works as much as the person using it
+            intelligently selects the keywords. Searching for a smartphone instead of an iPhone 6 will yield comically different results. Finally, there is the problem involving 
+            interpretation of the graphs presented. Average, mode, and median are all useful metrics in gauging the worth of a product, but a measly three numbers only
+            hold so much information. The graphs are there to supplement the three numbers, but there is a certain skill in being able to read and deduce what the graphs imply. 
+            For example, when searching for a graphics card, say a gtx 1060, there is no feature that isolates the query into searching only for the computer accessory. Unfortunately,
+            entire gaming computers will show up in the data, making the average, mean, and mode less useful. However, one can look at the graphs presented and
+            come up with a better-than-nothing guess of the price of a used graphics card by mentally eliminating the data points above a certain threshold. However, the data is 
+            unclear when using this method, and there is limited utility gained from situations such as these.
+        </p>
+        <p>
+          More possible issues and limitations can be read <a id = 'aLink'href = '/improvement'>here</a>. This section is for issues that I can't really fix or improve upon.
+        </p>
+        <script
+        src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+           <script src="index.js"></script>
+      </body>
+  
+  
+  </html>
