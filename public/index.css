@@ -3,28 +3,26 @@
    with position:fixed. Width, height, top and left speak
    speak for themselves. Background we set to 80% white with
    our animation centered, and no-repeating */
-   .modal {
-    display:    none;
-    position:   fixed;
-    z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
-   
 
-                    
-    background-image:  url('https://i.imgur.com/W0JfyHW.gif');
-    background-position: 50% 70%;
-    background-repeat: no-repeat;
-                
-    text-align: center;
-    
-}
 #adAmountNumber{
     display:inline;
     font-size: 3em;
     color : green;
+}
+#adAmountNumberEbay{
+    display:inline;
+    color : green;
+}
+#ebayMessage{
+    display: inline;
+    margin: 0 auto;
+    font-size : 1.5em;
+}
+#searchResultEbay{
+    text-align: center;
+    display: inline;
+    margin: 0 auto;
+    font-size : 1.5em;
 }
 #userSearchDiv{
     font-size: 3em;
@@ -33,6 +31,11 @@
 }
 /* THIS IS NOT AD AMOUNT */
 #adAmount{
+    display: inline;
+    margin: 0 auto;
+    font-size : 1.5em;
+}
+#adAmountEbay{
     display: inline;
     margin: 0 auto;
     font-size : 2em;
@@ -54,7 +57,10 @@ p{
     align-content: center;
     
 }
-
+#cat{
+    height : 50%;
+    width : 70%;
+}
 canvas{
     width : 50px;
     height : 50px;
@@ -136,6 +142,10 @@ searchIcon{
 }
 #averageResult{
     font-size: 4em;
+}
+#averageResultEbay{
+    font-size: 2em;
+    display:inline;
 }
 #divMedian{
     font-size: 4em;

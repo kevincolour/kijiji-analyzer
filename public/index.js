@@ -1,68 +1,12 @@
 $(document).ready(()=>{
-    
-//     //globals for the scrape API
-//     let timerId = 0;
-
-
-
-
-//     function repeatQuery(){
-//     $.ajax({
-//         type: 'GET',
-//         url : 'https://api.apify.com/v1/uESohuhnYLxmijy6a/crawlers/aHFsXCgT4Gr78rRkh/lastExec?token=ohLkfim9DQZGxTBnGyTXBW8ND',
-//         success : (success) => {
-//             console.log('here2');
-//             console.log(success);
-//             if (success.finishedAt != null){
-//                 console.log('hooray')
-
-//                 $.ajax({
-//                     type: 'GET',
-//                     url : 'https://api.apify.com/v1/uESohuhnYLxmijy6a/crawlers/aHFsXCgT4Gr78rRkh/lastExec/results?token=ohLkfim9DQZGxTBnGyTXBW8ND',
-//                     success : (success) => {
-//                         console.log('her5');
-//                         console.log(success);
-//                         clearInterval(timerId);
-                        
-//                     }
-//                 })
-
-                
-//             }
-//         }
-//     })
-
-//  }
- 
  
  
 
-    
-    
-//     $.ajax({
-//         type: 'POST',
-//         url : 'https://api.apify.com/v1/uESohuhnYLxmijy6a/crawlers/aHFsXCgT4Gr78rRkh/execute?token=HPnoYcbBHsRKL5X4HEifiAae7',
-//         success : (success) => {
-//             console.log('here2');
-//             console.log(success);
-//             if (success.finishedAt != null){
-//                 console.log('hooray')
-                
-                
-//             }
-//         }
-//     })
-
-
-
-//     timerId = window.setInterval(repeatQuery, 1000);
-    
     
     urlBase = 'https://kijiji-appraiser.herokuapp.com';
     var start = new Date().getTime();
     let alreadySearching = false;
 
-    
     $('#objectSearch').focus();
     $(document).keypress((e)=>{
      if (e.which == 13){
@@ -77,6 +21,45 @@ $(document).ready(()=>{
         ajaxStop: function() { $(".modal").hide(); $("#progressText").hide(); }    
     });
 
+let ebayProimses = [];
+
+
+function populateEbayPrices(query){
+    let promiseReturn = new Promise((resolve,reject) => {
+
+    
+        $.ajax({
+            type : 'POST',
+            url: urlBase + '/queryEbay',
+            data: {search: query},
+            success : (success) => {
+               console.log(success);
+               let dataset = success.sortedPrices;
+                
+               //big
+               let uniqueValues = Array.from(new Set (dataset.map((x)=> Math.ceil(x)))).sort(function(a,b){return a - b});
+               
+               
+               uniqueValuesCount = [];
+               uniqueValues.forEach(function(value,index) {
+                   var count = dataset.reduce(function(n, val) {
+                       return n + (val === value);
+                   }, 0);
+                   
+                   uniqueValuesCount.push(parseInt(count));
+               })
+               console.log(uniqueValuesCount);
+               console.log(uniqueValues);
+               resolve([uniqueValues,uniqueValuesCount,dataset.length,success.average]);
+             
+            }
+    
+        })
+    
+    });
+    return promiseReturn;
+}
+
 
    $('#searchButton').on('click.mynamespace', ()=>{
        if (!alreadySearching) {
@@ -84,8 +67,15 @@ $(document).ready(()=>{
     alreadySearching = true;    
     //console.log('here');
     
+    $("#searchResultEbay").prepend("On");
         let userSearchQuery = $('#objectSearch').val()
         let userSearchLocation = $('#userLocation').val()
+        //console.log(userSearchLocation === '');
+        //default to toronto
+        if (userSearchLocation === ''){
+            userSearchLocation = 'toronto';
+        }
+        let globalEbayData = populateEbayPrices(userSearchQuery.trim());
         //$('#progressUpdate').html('REQUEST ACCPETEND NOW SEARCHING');
         $.ajax({
             type: 'POST',
@@ -99,11 +89,11 @@ $(document).ready(()=>{
             success : (success) =>{
                 var end = new Date().getTime();
                 var time = (end - start) / 1000;
-                console.log('Execution time: ' + time);
+              console.log('Execution time: ' + time);
              
                // console.log(success);
 
-               
+               console.log(success);
 
                 
                 
@@ -143,7 +133,7 @@ $(document).ready(()=>{
                     uniqueValuesCountRange.push(totalAmount);
                     index += 1;
                 }
-                // console.log(uniqueValues);
+                 console.log(uniqueValues);
                 // console.log(uniqueValuesRange);
                 // console.log(uniqueValuesCountRange);
 
@@ -177,7 +167,7 @@ $(document).ready(()=>{
                  
                 
                 $divVar.append(Math.floor(success.average));
-                $divAdAmount.append('Out of ').append($divAdAmountNumber).append('ads for ').append($userSearchDiv);
+                $divAdAmount.append('Out of ').append($divAdAmountNumber).append('ads for ').append($userSearchDiv).append(', the results are');
                 $divMode.append(modeVar);
                 $divMedian.append(success.median);
                 //$divVar.append("The Median is" + success.median);
@@ -193,6 +183,69 @@ $(document).ready(()=>{
                 var ctxRange = document.getElementById("myChartRange").getContext('2d');
 
                 var ctx2 = document.getElementById("myChartPretty").getContext('2d');
+
+                var ebayChart = document.getElementById("ebayChart").getContext('2d');
+                globalEbayData.then((success) => {
+                    
+                   
+                let uniqueValuesEbay = success[0];
+                let uniqueValuesCountEbay = success[1];
+                let adCount = success[2];
+                let ebayAverage = Math.floor(success[3]);
+                $divAverage = $('<div></div>',{id: 'averageResultEbay'});
+                $divAdAmount = $('<div></div>', {id: 'adAmountEbay'});
+                $divAdAmountNumber = $('<div>'+ adCount + '</div>');
+                $divAdAmountNumber.attr('id', 'adAmountNumberEbay');
+              
+
+                console.log('adcount', adCount);
+                $divAdAmountNumber
+                $divAdAmount.append($divAdAmountNumber);
+                $divAverage.append(ebayAverage);
+                $divFullMsg = $('<div>On Ebay, the average price is</div>');
+                $divFullMsg.attr('id', 'ebayMessage');
+                $divFullMsg.append($divAverage).append('out of a total number of ').append($divAdAmount).append('ads');
+                $("#searchResultEbay").prepend($divFullMsg);
+                
+                
+                var myChart = new Chart(ebayChart, {
+                 type: 'line',
+                 
+                 data: {
+                     labels : uniqueValuesEbay,
+                     datasets: [{
+                         label: 'Amount of Prices',
+                         //xAxisID: 'Price',
+                         //yAxisID: '# of Sellers',
+                         cubicInterpolationMode : 'default',
+                        // backgroundColor : '#3399ff',
+                         borderColor : '#3399ff',
+                         data: uniqueValuesCountEbay,
+                         
+                     }]
+                 },
+                 options: {
+                     scales: {
+                         xAxes: [{
+                             ticks: {
+                                // fontSize: 40
+                             }
+                         }],
+                         yAxes: [{
+                             gridLines: {
+             
+                             },
+                             ticks: {
+                                 beginAtZero:true,
+                                 fontSize: 20
+                             }
+                         }]
+                     }
+                 }
+             
+             
+             });
+            });
                 alreadySearching = false;
 var myChart = new Chart(ctx, {
     type: 'line',
@@ -232,6 +285,44 @@ var myChart = new Chart(ctx, {
 
 });
 
+
+var myChart = new Chart(ctx, {
+    type: 'line',
+    
+    data: {
+        labels : uniqueValues,
+        datasets: [{
+            label: 'Amount of Prices',
+            //xAxisID: 'Price',
+            //yAxisID: '# of Sellers',
+            cubicInterpolationMode : 'default',
+           // backgroundColor : '#3399ff',
+            borderColor : '#3399ff',
+            data: uniqueValuesCount,
+            
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                ticks: {
+                   // fontSize: 40
+                }
+            }],
+            yAxes: [{
+                gridLines: {
+
+                },
+                ticks: {
+                    beginAtZero:true,
+                    fontSize: 20
+                }
+            }]
+        }
+    }
+
+
+});
 
 var myChart = new Chart(ctxRange, {
     type: 'line',

@@ -47,6 +47,103 @@ app.use(bodyParser.json());
     app.use('/', router);        
 
 
+router.post('/queryEbay', function (req,res) {
+    const userSearch = req.body.search.toLocaleLowerCase().trim();
+
+    let fullJson = {};
+    ebayPromises = [];
+    
+    let firstEbayUrl = 'https://svcs.ebay.com/services/search/FindingService/v1?'+
+        'SECURITY-APPNAME=kevinkim-AverageS-PRD-c51ca6568-54507c4f&' + 
+        'OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
+        '&itemFilter(0).name=FreeShippingOnly&itemFilter(0).value=false' + 
+        '&itemFilter(1).name=ListingType&itemFilter(1).value=FixedPrice' + 
+        '&itemFilter(2).name=Condition&itemFilter(2).value(0)=3000&itemFilter(2).value(1)=4000&itemFilter(2).value(2)=5000' + 
+        '&REST-PAYLOAD&keywords=' + userSearch + '&paginationInput.pageNumber=' + 1 + '&paginationInput.entriesPerPage=100&GLOBAL-ID=EBAY-ENCA&siteid=0'
+    
+    let firstPromise = new Promise((resolve,reject) =>{
+        request.get(firstEbayUrl, (error, response, body) =>{
+            let responseObj =(JSON.parse(response.body)) 
+                // console.log(responseObj);
+                let adlist = responseObj.findItemsByKeywordsResponse[0].searchResult[0].item;
+                let usdPrices = [];
+                adlist.forEach((value) =>{
+                    usdPrices.push(parseFloat(value.sellingStatus[0].currentPrice[0].__value__))
+                })
+                let sum = usdPrices.reduce((a,b) => {
+                   
+                    return  (a + b);
+                    }, 0);
+                let average = sum  / usdPrices.length;
+                    let totalPages = parseInt(responseObj.findItemsByKeywordsResponse[0].paginationOutput[0].totalPages[0]);
+                    resolve([average,totalPages]);                    
+    })})
+    firstPromise.then((success) => {
+    let average = success[0];
+    let averageModifier = average * 0.5;
+    let lowAverage = average - averageModifier;
+    let highAverage = average + averageModifier;
+
+    totalPages = success[1];
+    if (totalPages > 100){
+        totalPages = 100
+    }
+    pageIndex = 1;
+    while (pageIndex < totalPages + 1){
+        
+        let ebayUrl = 'https://svcs.ebay.com/services/search/FindingService/v1?'+
+        'SECURITY-APPNAME=kevinkim-AverageS-PRD-c51ca6568-54507c4f&' + 
+        'OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON' +
+        '&itemFilter(0).name=FreeShippingOnly&itemFilter(0).value=false' + 
+        '&itemFilter(1).name=ListingType&itemFilter(1).value=FixedPrice' + 
+        '&itemFilter(2).name=Condition&itemFilter(2).value(0)=3000&itemFilter(2).value(1)=4000&itemFilter(2).value(2)=5000' +
+        '&REST-PAYLOAD&keywords=' + userSearch + '&paginationInput.pageNumber=' + pageIndex + '&paginationInput.entriesPerPage=100&GLOBAL-ID=EBAY-ENCA&siteid=0'
+        let newPromise = new Promise ((resolve,reject) => {
+        request.get(ebayUrl, (error, response, body) =>{
+            let responseObj =(JSON.parse(response.body)) 
+         //   console.log(responseObj.findItemsByKeywordsResponse[0].errorMessage[0].error[0].message[0]);
+                 let adlist = responseObj.findItemsByKeywordsResponse[0].searchResult[0].item;
+           // console.log(adlist);
+                let usdPrices = [];
+                adlist.forEach((value) =>{
+                    let price = value.sellingStatus[0].currentPrice[0].__value__;
+                    if (price > lowAverage && price < highAverage){ 
+                        usdPrices.push(price)                    }
+                })
+                resolve(usdPrices);      
+        })
+    })
+    ebayPromises.push(newPromise);
+    pageIndex += 1;
+    }
+    Promise.all(ebayPromises).then((values)=>{
+
+
+        let allPricesRaw =[].concat.apply([],values);
+        let allPrices = allPricesRaw.map(x => {
+            let newPrice = x.replace(',','');
+            // console.log("new: %s old %s",newPrice,x);
+            return 1.3 * (Math.ceil(parseFloat(newPrice)));
+        })
+        let sum = allPrices.reduce((a,b) => {
+ 
+            return  (a + b);
+            }, 0);
+        
+        let average = sum / allPrices.length;
+        let sortedPrices =allPrices.sort(function(a,b){return a - b});
+        fullJson.average = average; 
+        fullJson.sortedPrices = sortedPrices;
+        
+        
+        res.json(fullJson);
+
+        
+        })
+    })
+
+})
+
 
 
 router.post('/scrape', function(req,res){
@@ -72,7 +169,7 @@ router.post('/scrape', function(req,res){
     // literally opens a chrome tab and google searches for the correct kijiji location;
     let scrape = async (resolve,reject) => {
         
-        const browser = await puppeteer.launch({args: ['--no-sandbox','--single-process', '--process-per-site', '--disable-setuid-sandbox']});
+        const browser = await puppeteer.launch({args: ['--no-sandbox','--single-process', '--process-per-site', '--disable-setuid-sandbox']
         const page = await browser.newPage();
         const keyboard = page.keyboard;
         
@@ -89,7 +186,7 @@ router.post('/scrape', function(req,res){
         await page.click('#tsf > div.tsf-p > div.jsb > center > input[type="submit"]:nth-child(2)');
 
         let options = {waitUntil:"networkidle0" }
-        await page.waitForNavigation(options);
+        await page.waitFor(5000);
         
         // if its not a kijiji url reject
         if (page.url().indexOf('kijiji') == -1){
@@ -103,7 +200,6 @@ router.post('/scrape', function(req,res){
     
     // });
     //search bar on kijiji
-    await page.waitForSelector('#SearchKeyword');
       await page.type('#SearchKeyword', SearchQuery);
 
          
@@ -203,7 +299,6 @@ rp(options)
 
      Promise.all(promisesList).then((values) => {
          let allPricesRaw =[].concat.apply([],values);
-
         let allPrices = allPricesRaw.map(x => {
             let newPrice = x.replace(',','');
             // console.log("new: %s old %s",newPrice,x);
@@ -285,9 +380,9 @@ function getPrices(url_var){
             children.each(function(i, elem) {
                 let toPrint = $(elem).children('.clearfix').children('.info').children('.info-container').children('.price');
                 let price = toPrint.html().trim().replace('$','');
-                if (price.indexOf('Contact') === -1 && price.indexOf('Swap') === -1 && price.indexOf('Free') === -1){
+                //symbols is nospacehtml
+                if (price.indexOf('&#xA0') === -1 && price.indexOf('Contact') === -1 && price.indexOf('Swap') === -1 && price.indexOf('Free') === -1){
                     prices.push(price);
-                   
 
                     //mabye push other things later
           //          obj.prices.push(price);
