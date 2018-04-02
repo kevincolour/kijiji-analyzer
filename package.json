@@ -10,7 +10,8 @@
     "puppeteer": "^1.1.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "request-promise-native": "^1.0.5"
+    "request-promise-native": "^1.0.5",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {},
   "scripts": {

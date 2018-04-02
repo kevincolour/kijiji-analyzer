@@ -222,7 +222,7 @@ function populateEbayPrices(query){
                          //yAxisID: '# of Sellers',
                          cubicInterpolationMode : 'default',
                         // backgroundColor : '#3399ff',
-                         borderColor : '#3399ff',
+                         borderColor : '#ffff66',
                          data: uniqueValuesCountEbay,
                          
                      }]

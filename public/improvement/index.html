@@ -42,8 +42,39 @@
       
                  
               </nav>
-      
-    
+              <h1>Improvements</h1>
+              <p>Hello. These are just my notes on the possible improvements. There are a lot of things I could do to make this better and they are in two categores.
+
+              </p>
+              <h2> Improvements on the coding side</h2>
+                <ul>
+                  <li>
+                    The biggest one is performance. There are some queries that timeout before my script can scrape kijiji. 'Cars' seems to take very long, and does not
+                    beat the 30s timer enforced by heroku. I'm not sure how to fix this, and trust me I've tried. What is infuriating is that there is a wild variance in 
+                    completion time depending on the query, but also depending on the day. I am not sure why this is the case.
+                  </li>
+                  <li>
+                    Ebay's implementation could use some work. The current implentation of it is quite naive and bare bones and leads to some serious issues
+                    on certain queries. The reason I don't want to do it is because their API is massive, and also I'm not even sure it's a solvable issue.
+                    Since my tool only allows the user to search using keywords, there is a certain limit on the fidelity of the searches. For example, there are some
+                    nonsense results that spike at 1 or 2 dollars for an item that is supposed to be hundreds of dollars.
+                  </li>
+                  
+                </ul>
+
+
+          
+                <h2> Improvements on everything else</h2>
+                <ul>
+                  <li>
+                    <p>The first thing that comes to mind is the inclusion of craigslist ( and other used-goods websites)</p>
+                  </li>
+                  <li>
+                    <p>A cool thing I could do to make this tool more buyer-oriented is have the graph be interactive. I could
+                      feasable make the graph clickable at the price points, and have a url to which ad is broacasting the price.
+                    </p>
+                    </li>
+                </ul>
             <script
             src="https://code.jquery.com/jquery-3.3.1.js"
             integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
