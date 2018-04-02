@@ -16,6 +16,7 @@
 #ebayMessage{
     display: inline;
     margin: 0 auto;
+     text-align: center;
     font-size : 1.5em;
 }
 #searchResultEbay{
