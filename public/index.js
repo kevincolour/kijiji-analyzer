@@ -336,7 +336,7 @@ var myChart = new Chart(ctxRange, {
             //xAxisID: 'Price',
             //yAxisID: '# of Sellers',
             //cubicInterpolationMode : 'default',
-            backgroundColor : '#ff0000',
+            backgroundColor : '#ff4d4d',
             borderColor : '#00b300',
             data: uniqueValuesCountRange,
             
