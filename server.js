@@ -244,7 +244,7 @@ router.post('/scrape', function(req,res){
         
     
 
- let  limit = 100;
+ let  limit = 50;
  let options = {
     uri: new_url,
     transform: function (body) {
