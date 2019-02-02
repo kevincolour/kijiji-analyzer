@@ -185,7 +185,7 @@ router.post('/scrape', function(req,res){
         let location = req.body.location
         let locationString = 'kijiji ' + location;
 
-        await page.goto('https://www.google.com/');
+        await page.goto('https://www.kijiji.ca/');
         // Scrape
         await keyboard.type(locationString);
 
