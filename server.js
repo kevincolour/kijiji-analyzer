@@ -439,7 +439,6 @@ function getPrices(url_var){
                 //symbols is nospacehtml
                 if (price.indexOf('&#xA0') === -1 && price.indexOf('Contact') === -1 && price.indexOf('Swap') === -1 && price.indexOf('Free') === -1){
                     prices.push(price);
-                    #mainPageContent > div.layout-3 > div.col-2 > div > div:nth-child(6) > div > div.info > div > div.price
                     //mabye push other things later
           //          obj.prices.push(price);
                 }
