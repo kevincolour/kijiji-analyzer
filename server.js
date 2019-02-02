@@ -379,7 +379,7 @@ function getPrices2(url_var){
         .then(function ($) {
             console.log('tick');
             let prices = [];
-            let children = $('##mainPageContent > div.layout-3 > div.col-2 > div').children('.regular-ad');
+            let children = $('#mainPageContent > div.layout-3 > div.col-2 > div').children('.regular-ad');
 
 
 
@@ -427,7 +427,7 @@ function getPrices(url_var){
            console.log('tick', tickCounter);
            tickCounter += 1;
             let prices = [];
-            let children = $('##mainPageContent > div.layout-3 > div.col-2 > div').children('.regular-ad');
+            let children = $('#mainPageContent > div.layout-3 > div.col-2 > div').children('.regular-ad');
 
 
 
