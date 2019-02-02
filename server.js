@@ -66,7 +66,7 @@ router.post('/queryEbay', function (req,res) {
             let responseObj =(JSON.parse(response.body))
             if (parseInt(responseObj.findItemsByKeywordsResponse[0].paginationOutput[0].totalPages[0]) === 0){
                 //failure, no results
-                reject("No results");
+               // reject("No results");
             }
             else{
 
@@ -193,9 +193,9 @@ router.post('/scrape', function(req,res){
         await page.waitFor(2000);
         
         // if its not a kijiji url reject
-        if (page.url().indexOf('kijiji') == -1){
-            reject(page.url())
-        } 
+        // if (page.url().indexOf('kijiji') == -1){
+        //     reject(page.url())
+        // } 
         
     //     page.once('load', () => {
             
