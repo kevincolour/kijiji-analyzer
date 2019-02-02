@@ -210,7 +210,7 @@ router.post('/scrape', function(req,res){
       
 
       //search button
-      // await page.click('#MainContainer > div:nth-child(1) > div > header > div.headerContainer-640323838.headerContainer__on-3459900220 > div.searchBarWrapper-3699875736 > form > button');
+      // await page.click('##mainPageContent > div:nth-child(1) > div > header > div.headerContainer-640323838.headerContainer__on-3459900220 > div.searchBarWrapper-3699875736 > form > button');
       await keyboard.press('Enter');
       await page.waitFor(500);
       //waiting for load
@@ -379,7 +379,7 @@ function getPrices2(url_var){
         .then(function ($) {
             console.log('tick');
             let prices = [];
-            let children = $('#MainContainer > div.layout-3 > div.col-2 > div').children('.regular-ad');
+            let children = $('##mainPageContent > div.layout-3 > div.col-2 > div').children('.regular-ad');
 
 
 
@@ -427,7 +427,7 @@ function getPrices(url_var){
            console.log('tick', tickCounter);
            tickCounter += 1;
             let prices = [];
-            let children = $('#MainContainer > div.layout-3 > div.col-2 > div').children('.regular-ad');
+            let children = $('##mainPageContent > div.layout-3 > div.col-2 > div').children('.regular-ad');
 
 
 
@@ -439,7 +439,7 @@ function getPrices(url_var){
                 //symbols is nospacehtml
                 if (price.indexOf('&#xA0') === -1 && price.indexOf('Contact') === -1 && price.indexOf('Swap') === -1 && price.indexOf('Free') === -1){
                     prices.push(price);
-
+                    #mainPageContent > div.layout-3 > div.col-2 > div > div:nth-child(6) > div > div.info > div > div.price
                     //mabye push other things later
           //          obj.prices.push(price);
                 }
