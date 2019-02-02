@@ -190,11 +190,6 @@ router.post('/scrape', function(req,res){
         await keyboard.type(locationString);
 
 
-        //im feeling lucky button
-        await page.focus('#tsf > div.tsf-p > div.jsb > center > input[type="submit"]:nth-child(2)');
-        await page.click('#tsf > div.tsf-p > div.jsb > center > input[type="submit"]:nth-child(2)');
-
-        let options = {waitUntil:"networkidle0" }
         await page.waitFor(2000);
         
         // if its not a kijiji url reject
